@@ -863,6 +863,9 @@ pause_function
 check_boot_system
 check_connection
 check_trim
+
+configure_mirrorlist
+
 pacman -Sy
 while true
 do
