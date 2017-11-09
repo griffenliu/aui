@@ -60,8 +60,9 @@ select_editor(){
 #}}}
 #MIRRORLIST {{{
 configure_mirrorlist(){
-  local countries_code=("AU" "AT" "BY" "BE" "BR" "BG" "CA" "CL" "CN" "CO" "CZ" "DK" "EE" "FI" "FR" "DE" "GR" "HK" "HU" "ID" "IN" "IR" "IE" "IL" "IT" "JP" "KZ" "KR" "LV" "LU" "MK" "NL" "NC" "NZ" "NO" "PL" "PT" "RO" "RU" "RS" "SG" "SK" "ZA" "ES" "LK" "SE" "CH" "TW" "TR" "UA" "GB" "US" "UZ" "VN")
-  local countries_name=("Australia" "Austria" "Belarus" "Belgium" "Brazil" "Bulgaria" "Canada" "Chile" "China" "Colombia" "Czech Republic" "Denmark" "Estonia" "Finland" "France" "Germany" "Greece" "Hong Kong" "Hungary" "Indonesia" "India" "Iran" "Ireland" "Israel" "Italy" "Japan" "Kazakhstan" "Korea" "Latvia" "Luxembourg" "Macedonia" "Netherlands" "New Caledonia" "New Zealand" "Norway" "Poland" "Portugal" "Romania" "Russia" "Serbia" "Singapore" "Slovakia" "South Africa" "Spain" "Sri Lanka" "Sweden" "Switzerland" "Taiwan" "Turkey" "Ukraine" "United Kingdom" "United States" "Uzbekistan" "Viet Nam")
+  # default china
+  # local countries_code=("AU" "AT" "BY" "BE" "BR" "BG" "CA" "CL" "CN" "CO" "CZ" "DK" "EE" "FI" "FR" "DE" "GR" "HK" "HU" "ID" "IN" "IR" "IE" "IL" "IT" "JP" "KZ" "KR" "LV" "LU" "MK" "NL" "NC" "NZ" "NO" "PL" "PT" "RO" "RU" "RS" "SG" "SK" "ZA" "ES" "LK" "SE" "CH" "TW" "TR" "UA" "GB" "US" "UZ" "VN")
+  # local countries_name=("Australia" "Austria" "Belarus" "Belgium" "Brazil" "Bulgaria" "Canada" "Chile" "China" "Colombia" "Czech Republic" "Denmark" "Estonia" "Finland" "France" "Germany" "Greece" "Hong Kong" "Hungary" "Indonesia" "India" "Iran" "Ireland" "Israel" "Italy" "Japan" "Kazakhstan" "Korea" "Latvia" "Luxembourg" "Macedonia" "Netherlands" "New Caledonia" "New Zealand" "Norway" "Poland" "Portugal" "Romania" "Russia" "Serbia" "Singapore" "Slovakia" "South Africa" "Spain" "Sri Lanka" "Sweden" "Switzerland" "Taiwan" "Turkey" "Ukraine" "United Kingdom" "United States" "Uzbekistan" "Viet Nam")
   country_list(){
     #`reflector --list-countries | sed 's/[0-9]//g' | sed 's/^/"/g' | sed 's/,.*//g' | sed 's/ *$//g'  | sed 's/$/"/g' | sed -e :a -e '$!N; s/\n/ /; ta'`
     PS3="$prompt1"
@@ -77,11 +78,13 @@ configure_mirrorlist(){
   }
   print_title "MIRRORLIST - https://wiki.archlinux.org/index.php/Mirrors"
   print_info "This option is a guide to selecting and configuring your mirrors, and a listing of current available mirrors."
-  OPTION=n
-  while [[ $OPTION != y ]]; do
-    country_list
-    read_input_text "Confirm country: $country_name"
-  done
+  #OPTION=n
+  #while [[ $OPTION != y ]]; do
+  #  country_list
+  #  read_input_text "Confirm country: $country_name"
+  #done
+  echo "autoselect default country china..."
+  country_code="CN"
 
   url="https://www.archlinux.org/mirrorlist/?country=${country_code}&use_mirror_status=on"
 
@@ -622,13 +625,17 @@ configure_hardwareclock(){
 configure_locale(){
   print_title "LOCALE - https://wiki.archlinux.org/index.php/Locale"
   print_info "Locales are used in Linux to define which language the user uses. As the locales define the character sets being used as well, setting up the correct locale is especially important if the language contains non-ASCII characters."
-  OPTION=n
-  while [[ $OPTION != y ]]; do
-    setlocale
-    read_input_text "Confirm locale ($LOCALE)"
-  done
+  #OPTION=n
+  #while [[ $OPTION != y ]]; do
+  #  setlocale
+  #  read_input_text "Confirm locale ($LOCALE)"
+  #done
+  echo "select default locale en_US..."
+  LOCALE_UTF8="en_US.UTF-8"
+  CN_UTF8="zh_CN.UTF-8"
   echo 'LANG="'$LOCALE_UTF8'"' > ${MOUNTPOINT}/etc/locale.conf
   arch_chroot "sed -i 's/#'${LOCALE_UTF8}'/'${LOCALE_UTF8}'/' /etc/locale.gen"
+  arch_chroot "sed -i 's/#'${CN_UTF8}'/'${CN_UTF8}'/' /etc/locale.gen"
   arch_chroot "locale-gen"
 }
 #}}}
@@ -867,12 +874,13 @@ check_trim
 configure_mirrorlist
 
 pacman -Sy
+
 while true
 do
   print_title "ARCHLINUX ULTIMATE INSTALL - https://github.com/helmuthdu/aui"
-  echo " 1) $(mainmenu_item "${checklist[1]}"  "Select Keymap"            "${KEYMAP}" )"
+  #echo " 1) $(mainmenu_item "${checklist[1]}"  "Select Keymap"            "${KEYMAP}" )"
   echo " 2) $(mainmenu_item "${checklist[2]}"  "Select Editor"            "${EDITOR}" )"
-  echo " 3) $(mainmenu_item "${checklist[3]}"  "Configure Mirrorlist"     "${country_name} (${country_code})" )"
+  #echo " 3) $(mainmenu_item "${checklist[3]}"  "Configure Mirrorlist"     "${country_name} (${country_code})" )"
   echo " 4) $(mainmenu_item "${checklist[4]}"  "Partition Scheme"         "${partition_layout}: ${partition}(${filesystem}) swap(${swap_type})" )"
   echo " 5) $(mainmenu_item "${checklist[5]}"  "Install Base System")"
   echo " 6) $(mainmenu_item "${checklist[6]}"  "Configure Fstab"          "${fstab}" )"
