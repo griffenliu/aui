@@ -333,7 +333,7 @@ choose_aurhelper(){
   print_title "AUR HELPER - https://wiki.archlinux.org/index.php/AUR_Helpers"
   print_info "AUR Helpers are written to make using the Arch User Repository more comfortable."
   print_warning "\tNone of these tools are officially supported by Arch devs."
-  aurhelper=("yaourt" "apacman" "pacaur" "done")
+  aurhelper=("yaourt" "apacman" "pacaur" "dooooooone")
   PS3="$prompt1"
   echo -e "Choose your default AUR helper to install\n"
   select OPT in "${aurhelper[@]}"; do
@@ -985,19 +985,19 @@ install_desktop_environment(){
     while true
     do
       print_title "$1 ESSENTIAL APPS"
-      echo " 1) $(menu_item "entrance-git gdm lightdm sddm" "Display Manager") $AUR"
-      echo " 2) $(menu_item "dmenu")"
-      echo " 3) $(menu_item "viewnior")"
-      echo " 4) $(menu_item "gmrun")"
-      echo " 5) $(menu_item "rxvt-unicode")"
+      echo " 1) $(menu_item "entrance-git gdm lightdm sddm" "Display Manager") $AUR"   #登录管理器
+      echo " 2) $(menu_item "dmenu")"                                                  #轻量级应用程序启动器
+      echo " 3) $(menu_item "viewnior")"                                               #轻快优雅的图像查看器
+      echo " 4) $(menu_item "gmrun")"                                                  #(Gnome Completion-Run) is an lightweight application launcher
+      echo " 5) $(menu_item "rxvt-unicode")"                                           #终端
       echo " 6) $(menu_item "squeeze-git") $AUR"
-      echo " 7) $(menu_item "thunar")"
-      echo " 8) $(menu_item "tint2")"
-      echo " 9) $(menu_item "volwheel")"
-      echo "10) $(menu_item "xfburn")"
-      echo "11) $(menu_item "xcompmgr")"
-      echo "12) $(menu_item "zathura")"
-      echo "13) $(menu_item "speedtest-cli") $AUR"
+      echo " 7) $(menu_item "thunar")"                                                 #文件管理器
+      echo " 8) $(menu_item "tint2")"                                                  #简洁轻量的面板/任务栏
+      echo " 9) $(menu_item "volwheel")"                                               #一个很小巧的程序,它常驻系统托盘,允许你使用鼠标滚轮来调节音量的大小
+      echo "10) $(menu_item "xfburn")"                                                 #一个简单的CD/DVD刻录工具
+      echo "11) $(menu_item "xcompmgr")"                                               #xcompmgr实现窗口阴影,淡入淡出效果
+      echo "12) $(menu_item "zathura")"                                                #超级好用的pdf阅读器
+      echo "13) $(menu_item "speedtest-cli") $AUR"                                     #命令行下测试服务器外网速度
       echo ""
       echo " d) DONE"
       echo ""
@@ -1443,18 +1443,20 @@ install_accessories_apps(){
   while true
   do
     print_title "ACCESSORIES APPS"
-    echo " 1) $(menu_item "catfish")"
-    echo " 2) $(menu_item "conky-lua") $AUR"
-    echo " 3) $(menu_item "docky") $AUR"
-    echo " 4) $(menu_item "galculator") $AUR"
-    echo " 5) $(menu_item "pamac-aur" "Pamac") $AUR"
-    echo " 6) $(menu_item "pyrenamer") $AUR"
-    echo " 7) $(menu_item "enpass-bin") $AUR"
-    echo " 8) $(menu_item "shutter hotshots" "$([[ ${KDE} -eq 1 ]] && echo "Hotshots" || echo "Shutter";)")"
-    echo " 9) $(menu_item "synapse")"
+    echo " 1) $(menu_item "catfish")"                                                 #Ubuntu下Linux桌面超轻量级搜索软件
+    echo " 2) $(menu_item "conky-lua") $AUR"                                          #轻量的系统监视器，可以在你桌面显示任何类型的信息，这个可以用lua进行配置
+    echo " 3) $(menu_item "docky") $AUR"                                              #Docky是从GNOME Do项目剥离出来的一个Dock软件,让打开常用应用和管理窗口变得更加简单和快速
+    echo " 4) $(menu_item "galculator") $AUR"                                         #科学计算器
+    echo " 5) $(menu_item "pamac-aur" "Pamac") $AUR"                                  #pamac是pacman的一个图形化前端
+    echo " 6) $(menu_item "pyrenamer") $AUR"                                          #实用的文件批量改名工具
+    echo " 7) $(menu_item "enpass-bin") $AUR"                                         #安全地管理你的密码和重要信息，让你的生活更轻松
+    echo " 8) $(menu_item "shutter hotshots" "$([[ ${KDE} -eq 1 ]] && echo "Hotshots" || echo "Shutter";)")" #Shutter 基于 Linux 的系统上（比如 Ubuntu）的一款功能丰富的截屏软件
+    echo " 9) $(menu_item "synapse")"                                                 #Linux 上最好的应用启动器
     echo "10) $(menu_item "tilix-bin") $AUR"
-    echo "11) $(menu_item "terminator")"
-    echo "12) $(menu_item "unified-remote-server" "Unified Remote")"
+    echo "11) $(menu_item "terminator")"                                              #很明显 Linux 上最强大的终端模拟器是功能丰富的 Terminator（终结者）
+    echo "12) $(menu_item "unified-remote-server" "Unified Remote")"                  #电脑遥控器
+	echo "13) $(menu_item "neofetch")"                                                #终端显示系统信息
+	echo "14) $(menu_item "screenfetch")"                                             #另外一个终端显示系统信息工具
     echo ""
     echo " b) BACK"
     echo ""
@@ -1505,6 +1507,12 @@ install_accessories_apps(){
         12)
           aur_package_install "unified-remote-server"
           system_ctl enable urserver
+          ;;
+		13)
+          package_install "neofetch"
+          ;;
+		14)
+          package_install "screenfetch"
           ;;
         "b")
           break
@@ -1700,21 +1708,21 @@ install_system_apps(){
   while true
   do
     print_title "SYSTEM TOOLS APPS"
-    echo " 1) $(menu_item "clamav")"
-    echo " 2) $(menu_item "cockpit") $AUR"
-    echo " 3) $(menu_item "docker")"
-    echo " 4) $(menu_item "firewalld")"
-    echo " 5) $(menu_item "gparted")"
-    echo " 6) $(menu_item "grsync")"
-    echo " 7) $(menu_item "hosts-update") $AUR"
-    echo " 8) $(menu_item "htop")"
-    echo " 9) $(menu_item "plex-media-server" "Plex") $AUR"
-    echo "10) $(menu_item "ufw") $AUR"
-    echo "11) $(menu_item "unified-remote-server" "Unified Remote") $AUR"
-    echo "12) $(menu_item "virtualbox")"
-    echo "13) $(menu_item "wine")"
-    echo "14) $(menu_item "netdata")"
-    echo "15) $(menu_item "nload")"
+    echo " 1) $(menu_item "clamav")"                                          #Clam 防病毒
+    echo " 2) $(menu_item "cockpit") $AUR"                                    #Cockpit 是一个自由开源的服务器管理软件,它使得我们可以通过它好看的 web 前端界面轻松地管理我们的 GNU/Linux 服务器
+    echo " 3) $(menu_item "docker")"                                          #Docker 是一个开源的应用容器引擎，让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化
+    echo " 4) $(menu_item "firewalld")"                                       #firewalld 是新一 Linux 代防火墙工具,它提供了支持网络 / 防火墙区域 (zone) 定义网络链接以及接口安全等级的动态防火墙管理工具
+    echo " 5) $(menu_item "gparted")"                                         #Ubuntu/Linux 磁盘分区工具
+    echo " 6) $(menu_item "grsync")"                                          #rsync图形界面
+    echo " 7) $(menu_item "hosts-update") $AUR"                               #自动更新Hosts的一个脚本
+    echo " 8) $(menu_item "htop")"                                            #带有改进的特性和用户体验的 top
+    echo " 9) $(menu_item "plex-media-server" "Plex") $AUR"                   #家庭媒体中心
+    echo "10) $(menu_item "ufw") $AUR"                                        #Ubuntu的防火墙
+    echo "11) $(menu_item "unified-remote-server" "Unified Remote") $AUR"     #手机远程控制电脑
+    echo "12) $(menu_item "virtualbox")"                                      #虚拟机
+    echo "13) $(menu_item "wine")"                                            #是一个能够在多种 POSIX-compliant 操作系统（诸如 Linux，Mac OSX 及 BSD 等）上运行 Windows 应用的兼容层
+    echo "14) $(menu_item "netdata")"                                         #Linux服务器监控的神器
+    echo "15) $(menu_item "nload")"                                           #linux网络流量实时监控工具之nload
     echo ""
     echo " b) BACK"
     echo ""
@@ -2732,6 +2740,7 @@ install_fonts(){
     echo " 8) $(menu_item "ttf-ms-fonts") $AUR"
     echo " 9) $(menu_item "wqy-microhei") (Chinese/Japanese/Korean Support)"
     echo "10) $(menu_item "noto-fonts-cjk") (Chinese/Japanese/Korean Support)"
+	echo "11) $(menu_item "noto-fonts-sc") (Chinese) $AUR"
     echo ""
     echo " b) BACK"
     echo ""
@@ -2773,6 +2782,9 @@ install_fonts(){
         10)
           package_install "noto-fonts-cjk"
           ;;
+		11)
+		  package_install "noto-fonts-sc"
+		  ;;
         "b")
           break
           ;;
@@ -2918,9 +2930,9 @@ while true
 do
   print_title "ARCHLINUX INSTALL - https://github.com/helmuthdu/aui"
   print_warning "USERNAME: ${username}"
-  echo " 1) $(mainmenu_item "${checklist[1]}" "Basic Setup")"
-  echo " 2) $(mainmenu_item "${checklist[2]}" "Desktop Environment|Window Manager")"
-  echo " 3) $(mainmenu_item "${checklist[3]}" "Accessories Apps")"
+  echo " 1) $(mainmenu_item "${checklist[1]}" "Basic Setup")"                                    #基本安装
+  echo " 2) $(mainmenu_item "${checklist[2]}" "Desktop Environment|Window Manager")"             #桌面环境
+  echo " 3) $(mainmenu_item "${checklist[3]}" "Accessories Apps")"                               #附属应用
   echo " 4) $(mainmenu_item "${checklist[4]}" "Development Apps")"
   echo " 5) $(mainmenu_item "${checklist[5]}" "Office Apps")"
   echo " 6) $(mainmenu_item "${checklist[6]}" "System Apps")"
@@ -2932,7 +2944,7 @@ do
   echo "12) $(mainmenu_item "${checklist[12]}" "Web server")"
   echo "13) $(mainmenu_item "${checklist[13]}" "Fonts")"
   echo "14) $(mainmenu_item "${checklist[14]}" "Extra")"
-  echo "15) $(mainmenu_item "${checklist[15]}" "Clean Orphan Packages")"
+  echo "15) $(mainmenu_item "${checklist[15]}" "Clean Orphan Packages")"                       #清除孤儿包
   echo "16) $(mainmenu_item "${checklist[16]}" "Reconfigure System")"
   echo ""
   echo " q) Quit"
