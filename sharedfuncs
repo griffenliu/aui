@@ -458,12 +458,15 @@
     is_package_installed "$1" && checkbox 1 || checkbox 0
   } #}}}
   aui_download_packages() { #{{{
+    #http://repo.archlinuxcn.org/x86_64/
+    #http://mirrors.ustc.edu.cn/archlinuxcn/x86_64/
+	#https://aur.archlinux.org/cgit/aur.git/snapshot
     for PKG in $1; do
       #exec command as user instead of root
       su - ${username} -c "
         [[ ! -d aui_packages ]] && mkdir aui_packages
         cd aui_packages
-        curl -o ${PKG}.tar.gz https://aur.archlinux.org/cgit/aur.git/snapshot/${PKG}.tar.gz
+        curl -o ${PKG}.tar.gz http://repo.archlinuxcn.org/x86_64/${PKG}.tar.gz
         tar zxvf ${PKG}.tar.gz
         rm ${PKG}.tar.gz
         cd ${PKG}
