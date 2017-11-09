@@ -382,6 +382,8 @@ choose_aurhelper(){
         fi
         AUR_PKG_MANAGER="pacaur"
         ;;
+	  d)
+	    done
       *)
         invalid_option
         ;;
@@ -426,6 +428,11 @@ add_custom_repositories(){
           add_repository "${repository_name}" "${repository_addr}" "Never"
           pause_function
           ;;
+		2)
+		  add_repository "archlinuxcn" "https://mirrors.ustc.edu.cn/archlinuxcn/$arch" "Never"
+		  pacman -S archlinuxcn-keyring
+		  pause_function
+		  ;;
         "d")
           break
           ;;
