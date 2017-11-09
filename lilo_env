@@ -383,7 +383,8 @@ choose_aurhelper(){
         AUR_PKG_MANAGER="pacaur"
         ;;
 	  d)
-	    done
+	    break
+		;;
       *)
         invalid_option
         ;;
