@@ -16,9 +16,9 @@ You can try it first with a `virtualbox`
 ### With git
 - Increase cowspace partition: `mount -o remount,size=2G /run/archiso/cowspace`
 - 修改/etc/pacman.d/mirrorlist，使用国内镜像，加快速度
- - wget https://griffenliu.github.io/aui/mirrors.sh，执行脚本
+    - wget https://griffenliu.github.io/aui/mirrors.sh，执行脚本
 - Get list of packages and install git: `pacman -Sy git`
-- get the script: `git clone git://github.com/helmuthdu/aui`
+- get the script: `git clone https://github.com/griffenliu/aui.git`
 
 ### Without git
 - get the script: ` wget https://github.com/helmuthdu/aui/tarball/master -O - | tar xz`
@@ -29,6 +29,19 @@ You can try it first with a `virtualbox`
 ## How to use
 - FIFO [system base]: `cd <dir> && ./fifo`
 - LILO [the rest...]: `cd <dir> && ./lilo`
+
+## 磁盘格式化
+```
+# 新手版
+$ parted /dev/sda( *注意选择自己的安装磁盘* )
+  mklabel msdos
+  mkpart primary ext4 1M 100M
+  set 1 boot on
+  mkpart primary linux-swap 100M 1.1G
+  mkpart primary ext4 1.1G -1
+  p
+  q
+```
 
 ## FIFO SCRIPT
 - Configure keymap
