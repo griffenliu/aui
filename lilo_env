@@ -673,12 +673,12 @@ install_video_cards(){
   #Virtualbox {{{
   if [[ ${VIDEO_DRIVER} == virtualbox ]]; then
     # 觉得这个有些问题，使用自己定义的方式直接安装驱动即可
-    #package_install "virtualbox-guest-modules-arch virtualbox-guest-utils mesa-libgl"
-    #add_module "vboxguest vboxsf vboxvideo" "virtualbox-guest"
-    #add_user_to_group ${username} vboxsf
-    #system_ctl disable ntpd
-    #system_ctl enable vboxservice
-	pacman -S --noconfirm xf86-video-vesa
+    package_install "virtualbox-guest-modules-arch virtualbox-guest-utils mesa-libgl xf86-video-vesa"
+    add_module "vboxguest vboxsf vboxvideo" "virtualbox-guest"
+    add_user_to_group ${username} vboxsf
+    system_ctl disable ntpd
+    system_ctl enable vboxservice
+	#pacman -S --noconfirm xf86-video-vesa
   #}}}
   #VMware {{{
   elif [[ ${VIDEO_DRIVER} == vmware ]]; then
