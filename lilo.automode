@@ -35,32 +35,32 @@
   MAINMENU="1-13 15"
 #}}}
 #BASIC SETUP {{{
-  CUPS="y"
-  CUSTOMREPO="n"         # Add custom repositories
-  FIRMWARE="y"           # Install custom firmwares
-  NFS="n"
-  READAHEAD="y"
-  SAMBA="y"
-  SSH="y"
-  TLP="n"                # Laptop Power Manager
-  ZRAM="y"
-  ZSH="y"
-  OH_MY_ZSH="y"
+  CUPS="y"               # 通用Unix打印系统       
+  CUSTOMREPO="y"         # 添加自定义仓库
+  FIRMWARE="n"           # 安装自定义固件
+  NFS="n"                # 网络文件共享服务器
+  READAHEAD="y"          # 预读文件到内存
+  SAMBA="y"              # 和windows共享文件
+  SSH="y"                #
+  TLP="n"                # 笔记本电源管理
+  ZRAM="y"               # 内存压缩
+  ZSH="y"                # Shell
+  OH_MY_ZSH="y"          # Shell样式
   PROPRIETARY_DRIVER="n" # Proprietary (NVIDIA) driver
-  FONTCONFIG="y"
+  FONTCONFIG="y"         # 字体配置
   #}}}
   #ADDITIONAL FIRMWARE {{{
     # 1) aic94xx-firmware
-    # 2) alsa-firmware
-    # 3) b43
-    # 4) b43legacy
+    # 2) alsa-firmware                              #alsa音频固件
+    # 3) b43                                        #b43无线网卡，和b43-legacy不能互用
+    # 4) b43legacy                                  #b43-legacy无线网卡
     # 5) bfa-firmware
-    # 6) bluez-firmware
-    # 7) broadcom-wl
-    # 8) ipw2100
-    # 9) ipw2200
+    # 6) bluez-firmware                             #开源蓝牙固件
+    # 7) broadcom-wl                                #无线网卡驱动
+    # 8) ipw2100                                    #ipw2100无线网卡
+    # 9) ipw2200                                    #ipw2200无线网卡
     #10) libffado [Firmware Audio Devices]
-    #11) libmtp [Android Devices]
+    #11) libmtp [Android Devices]                   #android设备
     #12) libraw1394 [IEE1394 Driver]
     FIRMWARE_OPTIONS="11"
   #}}}
@@ -80,19 +80,19 @@
   #12) i3
   #13) OpenBox
   #14) Xmonad
-  DESKTOPENV=4
+  DESKTOPENV=12
   #KDE {{{
-    # 1) Choqok
-    # 2) Digikam
-    # 3) K3b
-    # 4) Skrooge
-    # 5) Yakuake
-    KDE_OPTIONS="1-5"
+    # 1) Choqok      #KDE下的微博客户端
+    # 2) Digikam     #KDE桌面环境的优秀数字照片管理工具
+    # 3) K3b         #KDE在Linux或其它类Unix系统上的CD/DVD烧录的自由软件
+    # 4) Skrooge     #采用KDE开发的个人财务管理工具
+    # 5) Yakuake     #是一个KDE的下拉式终端软件
+    KDE_OPTIONS=""
   #}}}
   #ESSENTIAL APPS [Enlightenment,LXDE,Awesome,Fluxbox,OpenBox] {{{
     # 1) Display Manager
     # 2) Dmenu
-    # 3) Viewnior
+    # 3) Viewnior                    #轻快优雅的图像查看器
     # 4) Gmrun
     # 5) rxvt-unicode
     # 6) Squeeze
@@ -103,7 +103,8 @@
     #11) Xcompmgr
     #12) Zathura
     #13) speedtest-cli
-    MISCAPPS="1 3"
+	#14) lxterminal
+    MISCAPPS="2 3 14"
   #}}}
   #DISPLAY MANAGER {{{
     # 1) Elsa
@@ -111,18 +112,18 @@
     # 3) LightDM
     # 4) SDDM
     # 5) Slim
-    DISPLAY_MANAGER="3"
+    DISPLAY_MANAGER=""
   #}}}
   # 1) Icons Themes
   # 2) GTK2|GTK3 Themes
-  THEMES_OPTIONS="1 2"
+  THEMES_OPTIONS=""
   #ICONS THEMES {{{
     # 1) Numix
-    ICONS_THEMES="1"
+    ICONS_THEMES=""
   #}}}
   #GTK THEMES {{{
     # 1) Arc
-    GTK_THEMES="1"
+    GTK_THEMES=""
   #}}}
 #}}}
 #NETWORK MANAGER {{{
@@ -146,7 +147,7 @@
   # 9) Shutter|Hotshots
   #10) Tilix
   #11) Terminator
-  ACCESSORIES_OPTIONS="10"
+  ACCESSORIES_OPTIONS="3 8 10"
 #}}}
 #DEVELOPEMENT {{{
   # 1) Atom
@@ -164,7 +165,7 @@
   #13) OracleJDK
   #14) NodeJS
   #15) Microsoft Visual Studio Code
-  DEVELOPMENT_OPTIONS="13"
+  DEVELOPMENT_OPTIONS="2 12 13"
 #}}}
 #OFFICE {{{
   # 1) Abiword+Gnumeric|Calligra
@@ -178,7 +179,7 @@
   # 9) LibreOffice
   #10) OCRFeeder
   #11) Xmind
-  OFFICE_OPTIONS="9"
+  OFFICE_OPTIONS=""
 #}}}
 #SYSTEM TOOLS {{{
   # 1) ClamAV
@@ -196,7 +197,8 @@
   #13) Wine
   #14) netdata
   #15) nload
-  SYSTEMTOOLS_OPTIONS="10"
+  #16) fcitx
+  SYSTEMTOOLS_OPTIONS="8 16"
 #}}}
 #GRAPHICS {{{
   # 1) Blender
@@ -209,7 +211,7 @@
   # 8) Scribus
   # 9) Shotwell
   #10) Simple Scan
-  GRAPHICS_OPTIONS="2-7 9"
+  GRAPHICS_OPTIONS=""
 #}}}
 #INTERNET {{{
   # 1) Browser
@@ -226,7 +228,7 @@
     # 4) Midori|Konqueror
     # 5) Opera
     # 6) Vivaldi
-    BROWSERS_OPTIONS="3"
+    BROWSERS_OPTIONS="1"
   #}}}
   #DOWNLOAD|FILESHARE {{{
     # 1) AeroFS
@@ -259,7 +261,7 @@
     # 7) Telegram Desktop
     # 8) qTox
     # 9) discord
-    IM_OPTIONS="4"
+    IM_OPTIONS=""
   #}}}
   #MAPPING {{{
     # 1) Google Earth
@@ -293,14 +295,14 @@
     #13) Timidity++
     #14) Tomahawk
     #15) quodlibet
-    AUDIO_PLAYER_OPTIONS="4"
+    AUDIO_PLAYER_OPTIONS=""
   #}}}
   #EDITORS|TOOLS {{{
     # 1) Audacity
     # 2) Easytag
     # 3) OcenAudio
     # 4) Soundconverter|Soundkonverter
-    AUDIO_EDITOR_OPTIONS="2"
+    AUDIO_EDITOR_OPTIONS=""
   #}}}
 #}}}
 #VIDEO {{{
@@ -318,7 +320,7 @@
     # 7) Popcorn Time
     # 8) VLC
     # 9) Kodi
-    VIDEO_PLAYER_OPTIONS="8"
+    VIDEO_PLAYER_OPTIONS=""
   #}}}
   #EDITORS|TOOLS {{{
     # 1) Arista
@@ -331,7 +333,7 @@
     # 8) Openshot
     # 9) Pitivi
     #10) Transmageddon
-    VIDEO_EDITOR_OPTIONS="1"
+    VIDEO_EDITOR_OPTIONS=""
   #}}}
 #}}}
 #GAMES {{{
@@ -346,7 +348,7 @@
   # 2) LAPP - APACHE, POSTGRESQL & PHP
   # 3) LEMP - NGINX, MariaDB & PHP
   # 4) LEPP - NGINX, POSTGRESQL & PHP
-  WEBSERVER=4
+  WEBSERVER=0
   POSTGIS="n"
 #}}}
 #FONTS {{{
@@ -360,7 +362,7 @@
   # 8) ttf-ms-fonts
   # 9) wqy-microhei
   #10) noto-fonts-cjk
-  FONTS_OPTIONS="1-10"
+  FONTS_OPTIONS="9"
 #}}}
 #EXTRA {{{
   # 1) Global Menu

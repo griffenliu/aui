@@ -1000,6 +1000,7 @@ install_desktop_environment(){
       echo "11) $(menu_item "xcompmgr")"                                               #xcompmgr实现窗口阴影,淡入淡出效果
       echo "12) $(menu_item "zathura")"                                                #超级好用的pdf阅读器
       echo "13) $(menu_item "speedtest-cli") $AUR"                                     #命令行下测试服务器外网速度
+	  echo "14) $(menu_item "lxterminal")"                                             #另一个终端，比xterm和urxvt配置简单，并且依赖少小巧
       echo ""
       echo " d) DONE"
       echo ""
@@ -1047,6 +1048,9 @@ install_desktop_environment(){
           13)
             aur_package_install "speedtest-cli"
             ;;
+		  14)
+		    package_install "lxterminal"
+			;;
           "d")
             break
             ;;
@@ -1725,6 +1729,7 @@ install_system_apps(){
     echo "13) $(menu_item "wine")"                                            #是一个能够在多种 POSIX-compliant 操作系统（诸如 Linux，Mac OSX 及 BSD 等）上运行 Windows 应用的兼容层
     echo "14) $(menu_item "netdata")"                                         #Linux服务器监控的神器
     echo "15) $(menu_item "nload")"                                           #linux网络流量实时监控工具之nload
+	echo "16) $(menu_item "fcitx")"                                           #输入法
     echo ""
     echo " b) BACK"
     echo ""
@@ -1804,6 +1809,8 @@ install_system_apps(){
         15)
           package_install "nload"
           ;;
+		16)
+		  package_install "fcitx-im fcitx-configtool fcitx-sogoupinyin"
         "b")
           break
           ;;
