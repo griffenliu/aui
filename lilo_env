@@ -2793,7 +2793,7 @@ install_fonts(){
           package_install "noto-fonts-cjk"
           ;;
 		11)
-		  package_install "noto-fonts-sc"
+		  aur_package_install "noto-fonts-sc"
 		  ;;
         "b")
           break
