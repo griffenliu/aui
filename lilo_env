@@ -1811,6 +1811,7 @@ install_system_apps(){
           ;;
 		16)
 		  package_install "fcitx-im fcitx-configtool fcitx-sogoupinyin"
+		  ;;
         "b")
           break
           ;;

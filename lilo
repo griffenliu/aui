@@ -1989,9 +1989,9 @@ install_internet_apps(){
                 12)
                   package_install "youtube-dl"
                   ;;
-		13)
-		  aur_package_install "tixati"
-		  ;;
+		        13)
+		          aur_package_install "tixati"
+		          ;;
                 "b")
                   break
                   ;;
@@ -2088,9 +2088,9 @@ install_internet_apps(){
                 8)
                   aur_package_install "qtox-git"
                   ;;
-		9)
-		  aur_package_install "discord"
-		  ;;
+		        9)
+		          aur_package_install "discord"
+		          ;;
                 "b")
                   break
                   ;;
@@ -2545,10 +2545,10 @@ install_games(){
           package_install "steam"
           OPT=3
           ;;
-	4)
-	  aur_package_install "minecraft"
-	  OPT=4
-	  ;;
+	    4)
+	      aur_package_install "minecraft"
+	      OPT=4
+	      ;;
         "b")
           break
           ;;
