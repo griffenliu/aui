@@ -40,7 +40,7 @@
   FIRMWARE="n"           # 安装自定义固件
   NFS="n"                # 网络文件共享服务器
   READAHEAD="y"          # 预读文件到内存
-  SAMBA="y"              # 和windows共享文件
+  SAMBA="n"              # 和windows共享文件
   SSH="y"                #
   TLP="n"                # 笔记本电源管理
   ZRAM="y"               # 内存压缩
