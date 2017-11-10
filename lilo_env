@@ -284,6 +284,7 @@ select_user(){
   fi
   select OPT in "${users_list[@]}" "Create new user"; do
     echo "select user is $OPT."
+	pause_function
     if [[ $OPT == "Create new user" ]]; then
       create_new_user
     elif contains_element "$OPT" "${users_list[@]}"; then
