@@ -178,12 +178,12 @@ add_custom_repositories(){
             ;;
 		    2)
 		        add_repository "archlinuxcn" "http://repo.archlinuxcn.org/\$arch" "Optional TrustedOnly"
-		        pacman -Sy archlinuxcn-keyring
+		        pacman -S archlinuxcn-keyring
 		        pause_function
 		        ;;
         3)
             add_repository "archlinuxcn" "https://mirrors.ustc.edu.cn/archlinuxcn/\$arch" "Never"
-            pacman -Sy archlinuxcn-keyring
+            pacman -S archlinuxcn-keyring
             pause_function
             ;;
         "d")
