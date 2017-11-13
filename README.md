@@ -41,6 +41,15 @@ $ parted /dev/sda( *注意选择自己的安装磁盘* )
   mkpart primary ext4 1.1G -1
   p
   q
+  
+# 升级版
+$ parted /dev/sda
+  mklabel msdos
+  mkpart primary ext4 1M 100M   # 这里如果是独立系统100M足够了，但是如果是多内核或者多系统，则需要扩大空间为200M-500M
+  set 1 boot on
+  mkpart primary linux-swap 100M 2.1G    # 交换空间要按照内存大小设置，如果内存小于等于2G，则设置为两倍，否则设置为内存大小
+  mkpart primary ext4 2.1G 15.1G         # 根目录 / 一般设置为10-15G
+  mkpart primary ext4 15.1G -1           # /home目录
 ```
 
 ## FIFO SCRIPT
