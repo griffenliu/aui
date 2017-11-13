@@ -802,92 +802,36 @@ pause_function
 check_boot_system
 check_connection
 check_trim
-
+# 配置镜像
 configure_mirrorlist
-
 pacman -Sy
+# 选择编辑器
+select_editor
+# 分区
+umount_partitions
+create_partition_scheme
+format_partitions
+# 安装基本系统
+install_base_system
+configure_keymap
+setup_alt_dns
+# 配置Fstab
+configure_fstab
+# 配置主机名称
+configure_hostname
+# 配置时区
+configure_timezone
+# 配置Hardware Clock
+configure_hardwareclock
+# 配置本地化
+configure_locale
+# 配置Mkinitcpio
+configure_mkinitcpio
+# 安装启动脚本
+install_bootloader
+configure_bootloader
+# 设置root密码
+root_password
 
-while true
-do
-  print_title "ARCHLINUX ULTIMATE INSTALL - https://github.com/helmuthdu/aui"
-  #echo " 1) $(mainmenu_item "${checklist[1]}"  "Configure Mirrorlist"     "${country_name} (${country_code})" )"
-  echo " 2) $(mainmenu_item "${checklist[2]}"  "Select Editor"            "${EDITOR}" )"
-  echo " 3) $(mainmenu_item "${checklist[3]}"  "Partition Scheme"         "${partition_layout}: ${partition}(${filesystem}) swap(${swap_type})" )"
-  echo " 4) $(mainmenu_item "${checklist[4]}"  "Install Base System")"
-  echo " 5) $(mainmenu_item "${checklist[5]}"  "Configure Fstab"          "${fstab}" )"
-  echo " 6) $(mainmenu_item "${checklist[6]}"  "Configure Hostname"       "${host_name}" )"
-  echo " 7) $(mainmenu_item "${checklist[7]}"  "Configure Timezone"       "${ZONE}/${SUBZONE}" )"
-  echo " 8) $(mainmenu_item "${checklist[8]}"  "Configure Hardware Clock" "${hwclock}" )"
-  echo " 9) $(mainmenu_item "${checklist[9]}"  "Configure Locale"         "${LOCALE}" )"
-  echo "10) $(mainmenu_item "${checklist[10]}" "Configure Mkinitcpio")"
-  echo "11) $(mainmenu_item "${checklist[11]}" "Install Bootloader"       "${bootloader}" )"
-  echo "12) $(mainmenu_item "${checklist[12]}" "Root Password")"
-  echo ""
-  echo " d) Done"
-  echo ""
-  read_input_options
-  for OPT in ${OPTIONS[@]}; do
-    case "$OPT" in
-      1)
-        configure_mirrorlist
-        checklist[1]=1
-        ;;
-      2)
-        select_editor
-        checklist[2]=1
-        ;;
-      3)
-        umount_partitions
-        create_partition_scheme
-        format_partitions
-        checklist[3]=1
-        ;;
-      4)
-        install_base_system
-        configure_keymap
-        setup_alt_dns
-        checklist[4]=1
-        ;;
-      5)
-        configure_fstab
-        checklist[5]=1
-        ;;
-      6)
-        configure_hostname
-        checklist[6]=1
-        ;;
-      7)
-        configure_timezone
-        checklist[7]=1
-        ;;
-      8)
-        configure_hardwareclock
-        checklist[8]=1
-        ;;
-      9)
-        configure_locale
-        checklist[9]=1
-        ;;
-      10)
-        configure_mkinitcpio
-        checklist[10]=1
-        ;;
-      11)
-        install_bootloader
-        configure_bootloader
-        checklist[11]=1
-        ;;
-      12)
-        root_password
-        checklist[12]=1
-        ;;
-      "d")
-        finish
-        ;;
-      *)
-        invalid_option
-        ;;
-    esac
-  done
-done
+finish
 #}}}
