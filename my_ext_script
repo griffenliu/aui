@@ -762,7 +762,6 @@ install_desktop_environment(){
     config_i3_xinitrc "i3"
     pause_function
     install_misc_apps "i3"
-    ;;
     #}}}
 
 
