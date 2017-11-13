@@ -16,7 +16,9 @@ You can try it first with a `virtualbox`
 ### With git
 - Increase cowspace partition: `mount -o remount,size=2G /run/archiso/cowspace`
 - 修改/etc/pacman.d/mirrorlist，使用国内镜像，加快速度
-    - wget https://griffenliu.github.io/aui/mirrors.sh，执行脚本
+    - wget https://griffenliu.github.io/aui/mirrors.sh
+    - chmod a+x mirrors.sh
+    - mirrors.sh
 - Get list of packages and install git: `pacman -Sy git`
 - get the script: `git clone https://github.com/griffenliu/aui.git`
 
