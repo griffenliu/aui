@@ -27,52 +27,20 @@ fi
 #ARCHLINUX INSTALL SCRIPTS MODE {{{
 #DEFAULT EDITOR {{{
 select_editor(){
-  print_title "DEFAULT EDITOR"
-  editors_list=("emacs" "nano" "vi" "vim" "neovim" "zile");
-  PS3="$prompt1"
-  echo -e "Select editor\n"
-  select EDITOR in "${editors_list[@]}"; do
-    if contains_element "$EDITOR" "${editors_list[@]}"; then
-      package_install "$EDITOR"
-      break
-    else
-      invalid_option
-    fi
-  done
+   print_title "DEFAULT EDITOR"
+   EDITOR="vim"
+   package_install "$EDITOR"  #直接安装并使用默认编辑器vim
 }
 #}}}
 #MIRRORLIST {{{
 configure_mirrorlist(){
   # default china
-  # local countries_code=("AU" "AT" "BY" "BE" "BR" "BG" "CA" "CL" "CN" "CO" "CZ" "DK" "EE" "FI" "FR" "DE" "GR" "HK" "HU" "ID" "IN" "IR" "IE" "IL" "IT" "JP" "KZ" "KR" "LV" "LU" "MK" "NL" "NC" "NZ" "NO" "PL" "PT" "RO" "RU" "RS" "SG" "SK" "ZA" "ES" "LK" "SE" "CH" "TW" "TR" "UA" "GB" "US" "UZ" "VN")
-  # local countries_name=("Australia" "Austria" "Belarus" "Belgium" "Brazil" "Bulgaria" "Canada" "Chile" "China" "Colombia" "Czech Republic" "Denmark" "Estonia" "Finland" "France" "Germany" "Greece" "Hong Kong" "Hungary" "Indonesia" "India" "Iran" "Ireland" "Israel" "Italy" "Japan" "Kazakhstan" "Korea" "Latvia" "Luxembourg" "Macedonia" "Netherlands" "New Caledonia" "New Zealand" "Norway" "Poland" "Portugal" "Romania" "Russia" "Serbia" "Singapore" "Slovakia" "South Africa" "Spain" "Sri Lanka" "Sweden" "Switzerland" "Taiwan" "Turkey" "Ukraine" "United Kingdom" "United States" "Uzbekistan" "Viet Nam")
-  country_list(){
-    #`reflector --list-countries | sed 's/[0-9]//g' | sed 's/^/"/g' | sed 's/,.*//g' | sed 's/ *$//g'  | sed 's/$/"/g' | sed -e :a -e '$!N; s/\n/ /; ta'`
-    PS3="$prompt1"
-    echo "Select your country:"
-    select country_name in "${countries_name[@]}"; do
-      if contains_element "$country_name" "${countries_name[@]}"; then
-        country_code=${countries_code[$(( $REPLY - 1 ))]}
-        break
-      else
-        invalid_option
-      fi
-    done
-  }
   print_title "MIRRORLIST - https://wiki.archlinux.org/index.php/Mirrors"
   print_info "This option is a guide to selecting and configuring your mirrors, and a listing of current available mirrors."
-  #OPTION=n
-  #while [[ $OPTION != y ]]; do
-  #  country_list
-  #  read_input_text "Confirm country: $country_name"
-  #done
-  echo "autoselect default country china..."
+  echo "select default country china..."
   country_code="CN"
-
   url="https://www.archlinux.org/mirrorlist/?country=${country_code}&use_mirror_status=on"
-
   tmpfile=$(mktemp --suffix=-mirrorlist)
-
   # Get latest mirror list and save to tmpfile
   curl -so ${tmpfile} ${url}
   sed -i 's/^#Server/Server/g' ${tmpfile}
@@ -202,25 +170,9 @@ create_partition_scheme(){
 #}}}
 #SETUP PARTITION{{{
 create_partition(){
-  apps_list=("cfdisk" "cgdisk" "fdisk" "gdisk" "parted");
-  PS3="$prompt1"
   echo -e "Select partition program:"
-  select OPT in "${apps_list[@]}"; do
-    if contains_element "$OPT" "${apps_list[@]}"; then
-      select_device
-      case $OPT in
-        parted)
-          parted -a opt ${device}
-          ;;
-        *)
-          $OPT ${device}
-          ;;
-      esac
-      break
-    else
-      invalid_option
-    fi
-  done
+  select_device
+  parted -a opt ${device} # 默认使用parted进行分区
 }
 #}}}
 #SETUP LUKS {{{
@@ -573,11 +525,13 @@ configure_hostname(){
 configure_timezone(){
   print_title "TIMEZONE - https://wiki.archlinux.org/index.php/Timezone"
   print_info "In an operating system the time (clock) is determined by four parts: Time value, Time standard, Time Zone, and DST (Daylight Saving Time if applicable)."
-  OPTION=n
-  while [[ $OPTION != y ]]; do
-    settimezone
-    read_input_text "Confirm timezone (${ZONE}/${SUBZONE})"
-  done
+  # OPTION=n
+  # while [[ $OPTION != y ]]; do
+  #   settimezone
+  #   read_input_text "Confirm timezone (${ZONE}/${SUBZONE})"
+  # done
+  ZONE="Asia"
+  SUBZONE="Shanghai"
   arch_chroot "ln -sf /usr/share/zoneinfo/${ZONE}/${SUBZONE} /etc/localtime"
   arch_chroot "sed -i '/#NTP=/d' /etc/systemd/timesyncd.conf"
   arch_chroot "sed -i 's/#Fallback//' /etc/systemd/timesyncd.conf"
@@ -608,11 +562,6 @@ configure_hardwareclock(){
 configure_locale(){
   print_title "LOCALE - https://wiki.archlinux.org/index.php/Locale"
   print_info "Locales are used in Linux to define which language the user uses. As the locales define the character sets being used as well, setting up the correct locale is especially important if the language contains non-ASCII characters."
-  #OPTION=n
-  #while [[ $OPTION != y ]]; do
-  #  setlocale
-  #  read_input_text "Confirm locale ($LOCALE)"
-  #done
   echo "select default locale en_US..."
   LOCALE_UTF8="en_US.UTF-8"
   CN_UTF8="zh_CN.UTF-8"
@@ -861,19 +810,18 @@ pacman -Sy
 while true
 do
   print_title "ARCHLINUX ULTIMATE INSTALL - https://github.com/helmuthdu/aui"
-  #echo " 1) $(mainmenu_item "${checklist[1]}"  "Select Keymap"            "${KEYMAP}" )"
+  #echo " 1) $(mainmenu_item "${checklist[1]}"  "Configure Mirrorlist"     "${country_name} (${country_code})" )"
   echo " 2) $(mainmenu_item "${checklist[2]}"  "Select Editor"            "${EDITOR}" )"
-  #echo " 3) $(mainmenu_item "${checklist[3]}"  "Configure Mirrorlist"     "${country_name} (${country_code})" )"
-  echo " 4) $(mainmenu_item "${checklist[4]}"  "Partition Scheme"         "${partition_layout}: ${partition}(${filesystem}) swap(${swap_type})" )"
-  echo " 5) $(mainmenu_item "${checklist[5]}"  "Install Base System")"
-  echo " 6) $(mainmenu_item "${checklist[6]}"  "Configure Fstab"          "${fstab}" )"
-  echo " 7) $(mainmenu_item "${checklist[7]}"  "Configure Hostname"       "${host_name}" )"
-  echo " 8) $(mainmenu_item "${checklist[8]}"  "Configure Timezone"       "${ZONE}/${SUBZONE}" )"
-  echo " 9) $(mainmenu_item "${checklist[9]}"  "Configure Hardware Clock" "${hwclock}" )"
-  echo "10) $(mainmenu_item "${checklist[10]}" "Configure Locale"         "${LOCALE}" )"
-  echo "11) $(mainmenu_item "${checklist[11]}" "Configure Mkinitcpio")"
-  echo "12) $(mainmenu_item "${checklist[12]}" "Install Bootloader"       "${bootloader}" )"
-  echo "13) $(mainmenu_item "${checklist[13]}" "Root Password")"
+  echo " 3) $(mainmenu_item "${checklist[3]}"  "Partition Scheme"         "${partition_layout}: ${partition}(${filesystem}) swap(${swap_type})" )"
+  echo " 4) $(mainmenu_item "${checklist[4]}"  "Install Base System")"
+  echo " 5) $(mainmenu_item "${checklist[5]}"  "Configure Fstab"          "${fstab}" )"
+  echo " 6) $(mainmenu_item "${checklist[6]}"  "Configure Hostname"       "${host_name}" )"
+  echo " 7) $(mainmenu_item "${checklist[7]}"  "Configure Timezone"       "${ZONE}/${SUBZONE}" )"
+  echo " 8) $(mainmenu_item "${checklist[8]}"  "Configure Hardware Clock" "${hwclock}" )"
+  echo " 9) $(mainmenu_item "${checklist[9]}"  "Configure Locale"         "${LOCALE}" )"
+  echo "10) $(mainmenu_item "${checklist[10]}" "Configure Mkinitcpio")"
+  echo "11) $(mainmenu_item "${checklist[11]}" "Install Bootloader"       "${bootloader}" )"
+  echo "12) $(mainmenu_item "${checklist[12]}" "Root Password")"
   echo ""
   echo " d) Done"
   echo ""
@@ -881,7 +829,7 @@ do
   for OPT in ${OPTIONS[@]}; do
     case "$OPT" in
       1)
-        select_keymap
+        configure_mirrorlist
         checklist[1]=1
         ;;
       2)
@@ -889,53 +837,49 @@ do
         checklist[2]=1
         ;;
       3)
-        configure_mirrorlist
-        checklist[3]=1
-        ;;
-      4)
         umount_partitions
         create_partition_scheme
         format_partitions
-        checklist[4]=1
+        checklist[3]=1
         ;;
-      5)
+      4)
         install_base_system
         configure_keymap
         setup_alt_dns
+        checklist[4]=1
+        ;;
+      5)
+        configure_fstab
         checklist[5]=1
         ;;
       6)
-        configure_fstab
+        configure_hostname
         checklist[6]=1
         ;;
       7)
-        configure_hostname
+        configure_timezone
         checklist[7]=1
         ;;
       8)
-        configure_timezone
+        configure_hardwareclock
         checklist[8]=1
         ;;
       9)
-        configure_hardwareclock
+        configure_locale
         checklist[9]=1
         ;;
       10)
-        configure_locale
+        configure_mkinitcpio
         checklist[10]=1
         ;;
       11)
-        configure_mkinitcpio
+        install_bootloader
+        configure_bootloader
         checklist[11]=1
         ;;
       12)
-        install_bootloader
-        configure_bootloader
-        checklist[12]=1
-        ;;
-      13)
         root_password
-        checklist[13]=1
+        checklist[12]=1
         ;;
       "d")
         finish
