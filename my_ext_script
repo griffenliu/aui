@@ -923,6 +923,7 @@ install_development_apps(){
 #OFFICE {{{
 # 需要再次进行筛选,考虑不再安装时进行选择，需要时再进行选择
 install_office_apps(){
+    print_title "OFFICE APPS"
     ### 安装办公套件
     #package_install "gnumeric abiword abiword-plugins" #免费开源的电子表格处理软件，是Gnome的一部分
     #package_install "hunspell hunspell-$LOCALE_HS"     #拼写检查器
