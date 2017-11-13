@@ -851,7 +851,7 @@ install_usb_modem(){
 #}}}
 #ACCESSORIES {{{
 install_accessories_apps(){
-    # print_title "ACCESSORIES APPS"
+    print_title "ACCESSORIES APPS"
     ### Ubuntu下Linux桌面超轻量级搜索软件
     # package_install "catfish"
     ### 轻量的系统监视器，可以在你桌面显示任何类型的信息，这个可以用lua进行配置
@@ -887,7 +887,7 @@ install_accessories_apps(){
 #}}}
 #DEVELOPEMENT {{{
 install_development_apps(){
-    # print_title "DEVELOPMENT APPS"
+    print_title "DEVELOPMENT APPS"
     # package_remove "vim"
     # package_install "emacs"
     # package_install "atom"
