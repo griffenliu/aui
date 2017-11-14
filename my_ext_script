@@ -594,17 +594,6 @@ install_additional_firmwares(){
 #DESKTOP ENVIRONMENT {{{
 install_desktop_environment(){
     install_misc_apps(){
-        ### 轻量级应用程序启动器
-        package_install "dmenu"
-        ### 可以用来代替dmenu的启动器
-        package_install "rofi"
-        ### 透明及阴影效果
-        package_install "compton"
-        ### 终端
-        package_install "xterm"
-        ### 一个很小巧的程序,它常驻系统托盘,允许你使用鼠标滚轮来调节音量的大小
-        package_install "volwheel"
-
         ### 轻快优雅的图像查看器
         # package_install "viewnior"
         ### (Gnome Completion-Run) is an lightweight application launcher
@@ -632,7 +621,7 @@ install_desktop_environment(){
     config_i3_xinitrc() { #{{{
         #create a xinitrc file in home user directory
         cp -fv /etc/X11/xinit/xinitrc /home/${username}/.xinitrc
-        # echo -e "exec $1" >> /home/${username}/.xinitrc
+        # echo -e "exec i3" >> /home/${username}/.xinitrc
         # 使用下面几句话代替
         sed -i 's/^twm &//g' /home/${username}/.xinitrc
 	      sed -i 's/^xclock -geometry 50x50-1+1 &/export GTK_IM_MODULE=fcitx/g' /home/${username}/.xinitrc
@@ -648,9 +637,12 @@ install_desktop_environment(){
     print_title "i3 - https://wiki.archlinux.org/index.php/I3"
     print_info "i3 is a dynamic tiling window manager inspired by wmii that is primarily targeted at developers and advanced users. The stated goals for i3 include clear documentation, proper multi-monitor support, a tree structure for windows, and different modes like in vim."
     package_install "i3"
-    package_install "dmenu"
     # config xinitrc
-    config_i3_xinitrc "i3"
+    config_i3_xinitrc
+    ### 安装必备的：dmenu/rofi 应用程序启动器；compton-透明效果；xterm-默认终端；feh-壁纸管理；volwheel-声音管理
+    package_install "dmenu rofi compton xterm feh volwheel"
+    # config i3
+    # 拷贝配置文件到i3目录
     pause_function
     install_misc_apps "i3"
     #}}}
@@ -1169,22 +1161,11 @@ install_web_server(){
 #}}}
 #FONTS {{{
 install_fonts(){
-    print_title "FONTS - https://wiki.archlinux.org/index.php/Fonts"
-    # package_install "ttf-dejavu"
-    # aur_package_install "ttf-fira-code"
-    # package_remove "ttf-droid"
-    # package_remove "ttf-roboto"
-    # package_remove "ttf-ubuntu-font-family"
-    # package_remove "otf-oswald-ib"
-    # aur_package_install "ttf-google-fonts-git"
-    # package_install "ttf-liberation"
-    # package_install "ttf-bitstream-vera"
-    # package_install "ttf-hack"
-    # aur_package_install "ttf-mac-fonts"
-    # aur_package_install "ttf-ms-fonts"
+    # 应为字体使用Misc Fixed，感觉不错，中文字体使用Google的Noto
     # package_install "wqy-microhei"               #中文字体
-    package_install "noto-fonts-cjk"               #google出版的中文字体，应该很全，还没试过
-		# aur_package_install "noto-fonts-sc"          #只包含中文字体的google noto字体
+    aur_package_install "noto-fonts-sc"      #中文字体
+    # icons字体
+    package_install "ttf-font-awesome"
 }
 #}}}
 #CLEAN ORPHAN PACKAGES {{{
@@ -1194,73 +1175,6 @@ clean_orphan_packages(){
   pacman -Rsc --noconfirm $(pacman -Qqdt)
   #pacman -Sc --noconfirm
   pacman-optimize
-}
-#}}}
-#RECONFIGURE SYSTEM {{{
-# 重新配置系统？什么意思？
-reconfigure_system(){
-  print_title "KEYMAP - https://wiki.archlinux.org/index.php/KEYMAP"
-  print_info "The KEYMAP variable is specified in the /etc/rc.conf file. It defines what keymap the keyboard is in the virtual consoles. Keytable files are provided by the kbd package."
-  OPTION=n
-  while [[ $OPTION != y ]]; do
-    getkeymap
-    read_input_text "Confirm keymap: $KEYMAP"
-  done
-  localectl set-keymap ${KEYMAP}
-
-  print_title "HOSTNAME - https://wiki.archlinux.org/index.php/HOSTNAME"
-  print_info "A host name is a unique name created to identify a machine on a network.Host names are restricted to alphanumeric characters.\nThe hyphen (-) can be used, but a host name cannot start or end with it. Length is restricted to 63 characters."
-  read -p "Hostname [ex: archlinux]: " HN
-  hostnamectl set-hostname $HN
-
-  print_title "TIMEZONE - https://wiki.archlinux.org/index.php/Timezone"
-  print_info "In an operating system the time (clock) is determined by four parts: Time value, Time standard, Time Zone, and DST (Daylight Saving Time if applicable)."
-  OPTION=n
-  while [[ $OPTION != y ]]; do
-    settimezone
-    read_input_text "Confirm timezone ($ZONE/$SUBZONE)"
-  done
-  timedatectl set-timezone ${ZONE}/${SUBZONE}
-
-  print_title "HARDWARE CLOCK TIME - https://wiki.archlinux.org/index.php/Internationalization"
-  print_info "This is set in /etc/adjtime. Set the hardware clock mode uniformly between your operating systems on the same machine. Otherwise, they will overwrite the time and cause clock shifts (which can cause time drift correction to be miscalibrated)."
-  hwclock_list=('UTC' 'Localtime');
-  PS3="$prompt1"
-  select OPT in "${hwclock_list[@]}"; do
-    case "$REPLY" in
-      1)
-        timedatectl set-local-rtc false
-        ;;
-      2)
-        timedatectl set-local-rtc true
-        ;;
-      *) invalid_option ;;
-    esac
-    [[ -n $OPT ]] && break
-  done
-  timedatectl set-ntp true
-}
-#}}}
-#EXTRA {{{
-install_extra(){
-    print_title "EXTRA"
-    ### 全局菜单
-    # aur_package_install "gtk2-appmenu gtk3-appmenu"
-    # if [[ ${KDE} -eq 1 ]]; then
-    #     aur_package_install "appmenu-qt appmenu-gtk"
-    #     aur_package_install "kdeplasma-applets-menubar"
-    # fi
-    # if [[ ! -f /home/${username}/.config/gtk-3.0/settings.ini ]]; then
-    #     run_as_user "echo -e \"[Settings]\ngtk-shell-shows-menubar = 1\" > /home/${username}/.config/gtk-3.0/settings.ini"
-    # else
-    #     add_line "gtk-shell-shows-menubar = 1" "/home/${username}/.config/gtk-3.0/settings.ini"
-    # fi
-
-    ### 很小的守护进程，管理浏览器配置文件？
-    # aur_package_install "profile-sync-daemon"
-    # run_as_user "psd"
-    # run_as_user "$EDITOR /home/${username}/.config/psd/psd.conf"
-    # run_as_user "systemctl --user enable psd.service"
 }
 #}}}
 #FINISH {{{
