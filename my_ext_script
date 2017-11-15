@@ -208,33 +208,25 @@ install_basic_setup(){
   # 针对不方便上网，或缺乏图形化的网络浏览器的用户而设计，提供了尽可能极佳的体验
   # package_install "bc rsync mlocate bash-completion pkgstats arch-wiki-lite"
   package_install "mlocate bash-completion"
-  pause_function
+  #pause_function
+
   #压缩工具
-  print_title "(UN)COMPRESS TOOLS - https://wiki.archlinux.org/index.php/P7zip"
   package_install "zip unzip unrar p7zip lzop cpio"
-  pause_function
+  #pause_function
+
   #Avahi是一个零配置的网络服务发现的实现
-  print_title "AVAHI - https://wiki.archlinux.org/index.php/Avahi"
-  print_info "Avahi is a free Zero Configuration Networking (Zeroconf) implementation, including a system for multicast DNS/DNS-SD discovery. It allows programs to publish and discovers services and hosts running on a local network with no specific configuration."
   package_install "avahi nss-mdns"
   is_package_installed "avahi" && system_ctl enable avahi-daemon
-  pause_function
 
   #选用pulseaudio+alsa的好处和坏处,好处就是解决混音和声卡独占问题,缺点就是有些软件(极其个别)还不支持
   #ALSA(高级Linux声音体系)是为声卡提供驱动的Linux内核组件,以替代原先的OSS(开放声音系统)
-  print_title "ALSA - https://wiki.archlinux.org/index.php/Alsa"
-  print_info "The Advanced Linux Sound Architecture (ALSA) is a Linux kernel component intended to replace the original Open Sound System (OSSv3) for providing device drivers for sound cards."
   package_install "alsa-utils alsa-plugins"
-  pause_function
+  #pause_function
   #PulseAudio是声音服务器,简单说,软件要发声就先发消息给声音服务器,然后声音服务器经过处理(主要是多条音频流的混音),然后发给驱动控制声音设备发出声音.
-  print_title "PULSEAUDIO - https://wiki.archlinux.org/index.php/Pulseaudio"
-  print_info "PulseAudio is the default sound server that serves as a proxy to sound applications using existing kernel sound components like ALSA or OSS"
   package_install "pulseaudio pulseaudio-alsa"
-  pause_function
+  #pause_function
 
   #文件系统支持
-  print_title "NTFS/FAT/exFAT/F2FS - https://wiki.archlinux.org/index.php/File_Systems"
-  print_info "A file system (or filesystem) is a means to organize data expected to be retained after a program terminates by providing procedures to store, retrieve and update data, as well as manage the available space on the device(s) which contain it. A file system organizes data in an efficient manner and is tuned to the specific characteristics of the device."
   package_install "ntfs-3g dosfstools exfat-utils f2fs-tools fuse fuse-exfat autofs mtpfs"
   pause_function
 }
@@ -621,27 +613,30 @@ install_desktop_environment(){
     config_i3_xinitrc() { #{{{
         #create a xinitrc file in home user directory
         cp -fv /etc/X11/xinit/xinitrc /home/${username}/.xinitrc
-        # echo -e "exec i3" >> /home/${username}/.xinitrc
-        # 使用下面几句话代替
-        sed -i 's/^twm &//g' /home/${username}/.xinitrc
-	      sed -i 's/^xclock -geometry 50x50-1+1 &/export GTK_IM_MODULE=fcitx/g' /home/${username}/.xinitrc
-	      sed -i 's/^xterm -geometry 80x50+494+51 &/export QT_IM_MODULE=fcitx/g' /home/${username}/.xinitrc
-	      sed -i 's/^xterm -geometry 80x20+494-0 &/export XMODIFIERS="@im=fcitx"/g' /home/${username}/.xinitrc
-	      sed -i 's/^exec xterm -geometry 80x66+0+0 -name login/exec $1/g' /home/${username}/.xinitrc
+        # 代替.xinitrc配置文件中的默认桌面配置，使用自定义设置
+        # 这里设置在桌面环境时使用中文locale
+        sed -i 's/^twm &/export LANG=zh_CN.UTF-8/g' /home/${username}/.xinitrc
+	      sed -i 's/^xclock -geometry 50x50-1+1 &/export LANGUAGE=zh_CN:en_US/g' /home/${username}/.xinitrc
+	      sed -i 's/^xterm -geometry 80x50+494+51 &/export LC_CTYPE=en_US.UTF-8/g' /home/${username}/.xinitrc
+        # fcitx输入法设置
+	      sed -i 's/^xterm -geometry 80x20+494-0 &/export GTK_IM_MODULE=fcitx/g' /home/${username}/.xinitrc
+	      sed -i 's/^exec xterm -geometry 80x66+0+0 -name login/export QT_IM_MODULE=fcitx/g' /home/${username}/.xinitrc
+        echo -e 'export XMODIFIERS="@im=fcitx"' >> /home/${username}/.xinitrc
+        # 启动桌面环境
+        echo -e "exec i3" >> /home/${username}/.xinitrc
+        # 设置用户权限
         chown -R ${username}:users /home/${username}/.xinitrc
     } #}}}
 
-    print_title "DESKTOP ENVIRONMENT|WINDOW MANAGER"
-    print_info "A DE provide a complete GUI for a system by bundling together a variety of X clients written using a common widget toolkit and set of libraries.\n\nA window manager is one component of a system's graphical user interface."
     #I3 {{{
-    print_title "i3 - https://wiki.archlinux.org/index.php/I3"
-    print_info "i3 is a dynamic tiling window manager inspired by wmii that is primarily targeted at developers and advanced users. The stated goals for i3 include clear documentation, proper multi-monitor support, a tree structure for windows, and different modes like in vim."
-    package_install "i3"
+    # package_install "i3"
+    # 使用i3-gaps代替i3，主要是可以透明底部bar，简单
+    aur_package_install "i3-gaps"
     # config xinitrc
     config_i3_xinitrc
     ### 安装必备的：dmenu/rofi 应用程序启动器；compton-透明效果；xterm-默认终端；feh-壁纸管理；volwheel-声音管理
     package_install "dmenu rofi compton xterm feh volwheel"
-    # config i3
+    aur_package_install "polybar-git"
     # 拷贝配置文件到i3目录
     pause_function
     install_misc_apps "i3"
@@ -1162,10 +1157,18 @@ install_web_server(){
 #FONTS {{{
 install_fonts(){
     # 应为字体使用Misc Fixed，感觉不错，中文字体使用Google的Noto
-    # package_install "wqy-microhei"               #中文字体
-    aur_package_install "noto-fonts-sc"      #中文字体
+    # wqy-microhei - 文泉驿微米黑，无衬线形式字体
+    # wqy-microhei-lite - 文泉驿微米黑light版（笔画更细）
+    # package_install "wqy-microhei"         #中文字体
+    # adobe-source-han-sans-otc-fonts - 思源黑体，无衬线字体
+    # adobe-source-han-serif-otc-fonts - 思源宋体，衬线字体
+    # adobe-source-han-sans-cn-fonts - 思源黑体简体中文部分
+    # adobe-source-han-serif-cn-fonts - 思源宋体简体中文部分
+    package_install "adobe-source-han-serif-cn-fonts"     #思源宋体
+    #package_install "noto-fonts-cjk"         #中文字体
+    #aur_package_install "noto-fonts-sc"      #中文字体，单独安装这个不好用，并且安装困难，放弃，这个和思源是一样的，直接使用思源宋体即可
     # icons字体
-    package_install "ttf-font-awesome"
+    #package_install "ttf-font-awesome"
 }
 #}}}
 #CLEAN ORPHAN PACKAGES {{{
@@ -1216,38 +1219,49 @@ pause_function
 
 #基础安装
 install_basic_setup
-# install_zsh
-install_ssh
-# install_nfs     #NFS网络文件系统服务器
-# install_samba   #Unix上实现SMB(Server Message Block)的一个工具套件,SMB通常是windows用来实现共享的，包括文件和打印机等。而Unix上装上SMB，则使得Unix能够和windows连接在一起，实现两者的资源互通。
 install_tlp       #TLP是一款Linux流行的电源工具软件
-enable_readahead  #指Linux系统内核将指定文件的某区域预读进页缓存起来，便于接下来对该区域进行读取时，不会因缺页（page fault）而阻塞。预读可以有效的减少磁盘的寻道次数和应用程序的I/O等待时间，是改进磁盘读I/O性能的重要优化手段之一。
-install_zram      #压缩内存
-# 安装瞎看驱动以及桌面环境
+# 安装显卡驱动
 install_video_cards
+# 安装桌面环境
 install_xorg
+# 安装字体
+install_fonts
 # 安装字体配置
-font_config
-# 安装通用打印系统
-install_cups
-# 安装可选固件
-install_additional_firmwares
+#font_config
 # 安装桌面环境
 install_desktop_environment
+# 安装常用应用
+package_install "lantern"              #蓝灯，穿越长城
+package_install "wiznote"              #为知笔记，多端笔记同步
+aur_package_install "google-chrome"    #chrome浏览器
+aur_package_install "wps-office"       #wps办公软件
+
+
+# 安装通用打印系统
+#install_cups
+# 安装附件应用
+#install_accessories_apps
+# 安装开发工具
+#install_development_apps
+# 安装办公工具
+#install_office_apps
+# 安装系统应用
+#install_system_apps
+# 安装互联网应用
+#install_internet_apps
+
+# 安装可选固件
+#install_additional_firmwares
+# install_zsh
+# install_ssh
+# install_nfs     #NFS网络文件系统服务器
+# install_samba   #Unix上实现SMB(Server Message Block)的一个工具套件,SMB通常是windows用来实现共享的，包括文件和打印机等。而Unix上装上SMB，则使得Unix能够和windows连接在一起，实现两者的资源互通。
+#enable_readahead  #指Linux系统内核将指定文件的某区域预读进页缓存起来，便于接下来对该区域进行读取时，不会因缺页（page fault）而阻塞。预读可以有效的减少磁盘的寻道次数和应用程序的I/O等待时间，是改进磁盘读I/O性能的重要优化手段之一。
+#install_zram      #压缩内存
 # install_nm_wicd #网络管理
 # install_usb_modem #3G网络支持
-# 安装附件应用
-install_accessories_apps
-# 安装开发工具
-install_development_apps
-# 安装办公工具
-install_office_apps
-# 安装系统应用
-install_system_apps
 # 安装图形应用
 # install_graphics_apps
-# 安装互联网应用
-install_internet_apps
 # 安装音频应用
 # install_audio_apps
 # 安装视频应用
@@ -1256,8 +1270,6 @@ install_internet_apps
 # install_games
 # 安装web服务器
 # install_web_server
-# 安装字体
-install_fonts
 # 安装补充软件
 # install_extra
 # 清除孤儿包
